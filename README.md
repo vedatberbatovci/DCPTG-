@@ -1,161 +1,18 @@
-# DCPTG-
-Decentralized Crypto Platform Trading Gateway
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+`Student and GPT Responses\` contains the answers given by students and ChatGPT for each questions. There are 10 questions associated with each course, and for each question, there are three answers provided by students and three answers provided by ChatGPT. File name indicates whether the content therein are given by students or ChatGPT.
 
-interface IERC20 {
-    function transferFrom(address from, address to, uint value) external returns (bool);
-    function transfer(address to, uint value) external returns (bool);
-    function balanceOf(address account) external view returns (uint);
-}
+`QuillBot Responses\` contains the paraphrased version of ChatGPT answers, organized in the same way as in `Archive\`. File names contain the index of the answer (1, 2, or 3), the mode of paraphrasing (creative, expand, formal, etc.), and the strength of paraphrasing. For our experiments, all strength are set to the highest strength level, 3. 
 
-contract SimpleSwap {
-    address public owner;
-    address public usdtToken;
-    uint public rate;
+`Grades_and_Taxonomy.csv` contains the grades received by each of the student and GPT responses from all three graders, as well as where the question falls on the Anderson and Krathwohl taxonomy. 
 
-    constructor(address _usdtToken, uint _rate) {
-        owner = 0x2574F1AA2841747357F21A965fD989Db410fbD83;
-        usdtToken = _usdtToken;
-        rate = _rate;
+Citation
+--------
+    @article{ibrahim2023perception,
+        title       = {Perception, performance, and detectability of conversational artificial intelligence across 32 university courses},
+        author      = {Hazem Ibrahim, Fengyuan Liu, Rohail Asim, Balaraju Battu, Sidahmed Benabderrahmane, Bashar Alhafni, Wifag Adnan, Tuka Alhanai, Bedoor AlShebli, Riyadh Baghdadi, Jocelyn J. Bélanger, Elena Beretta, Kemal Celik, Moumena Chaqfeh, Mohammed F. Daqaq, Zaynab El Bernoussi, Daryl Fougnie, Borja Garcia de Soto, Alberto Gandolfi, Andras Gyorgy, Nizar Habash, J. Andrew Harris, Aaron Kaufman, Lefteris Kirousis, Korhan Kocak, Kangsan Lee, Seungah S. Lee, Samreen Malik, Michail Maniatakos, David Melcher, Azzam Mourad, Minsu Park, Mahmoud Rasras, Alicja Reuben, Dania Zantout, Nancy W. Gleason, Kinga Makovi, Talal Rahwan and Yasir Zak},
+        journal     = {Scientific Reports},
+        volume      = {13},
+        number      = {1},
+        pages       = {12187},
+        year        = {2023},
+        publisher   = {Nature Publishing Group UK London}
     }
-
-    function swapETHtoUSDT() public payable {
-        uint amountToSend = msg.value * rate;
-        IERC20(usdtToken).transfer(msg.sender, amountToSend);
-    }
-
-    function swapUSDTtoETH(uint amount) public {
-        uint ethToSend = amount / rate;
-        IERC20(usdtToken).transferFrom(msg.sender, address(this), amount);
-        payable(msg.sender).transfer(ethToSend);
-    }
-
-    receive() external payable {}
-
-    function withdrawETH() public {
-        require(msg.sender == owner, "Only owner");
-        payable(owner).transfer(address(this).balance);
-    }
-}async function main() {
-  const [deployer] = await ethers.getSigners();
-
-  console.log("Deploying contract with address:", deployer.address);
-
-  const usdtAddress = "0x509Ee0d083DdF8AC028f2a56731412EDD63223B9"; // Goerli USDT token address
-  const rate = 1000; // 1 ETH = 1000 USDT
-
-  const SimpleSwap = await ethers.getContractFactory("SimpleSwap");
-  const swap = await SimpleSwap.deploy(usdtAddress, rate);
-
-  await swap.deployed();
-
-  console.log("SimpleSwap deployed at:", swap.address);
-}
-
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});require("@nomiclabs/hardhat-waffle");
-require("dotenv").config();
-
-module.exports = {
-  solidity: "0.8.17",
-  networks: {
-    hardhat: {},
-    localhost: {
-      url: "http://127.0.0.1:8545"
-    },
-    goerli: {
-      url: process.env.GOERLI_RPC_URL || "",
-      accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : []
-    }
-  }
-};GOERLI_RPC_URL=https://goerli.infura.io/v3/YOUR_INFURA_PROJECT_ID
-PRIVATE_KEY=your_private_wallet_keyimport { ethers } from "ethers";
-import { useState } from "react";
-
-const USDT_ADDRESS = "0x509Ee0d083DdF8AC028f2a56731412EDD63223B9"; // Goerli USDT
-
-const ERC20_ABI = [
-  "function balanceOf(address) view returns (uint)",
-  "function decimals() view returns (uint8)"
-];
-
-function App() {
-  const [wallet, setWallet] = useState(null);
-  const [ethBalance, setEthBalance] = useState(null);
-  const [usdtBalance, setUsdtBalance] = useState(null);
-
-  const connectWallet = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const [account] = await provider.send("eth_requestAccounts", []);
-    setWallet(account);
-
-    const ethBal = await provider.getBalance(account);
-    setEthBalance(ethers.utils.formatEther(ethBal));
-
-    const usdt = new ethers.Contract(USDT_ADDRESS, ERC20_ABI, provider);
-    const decimals = await usdt.decimals();
-    const bal = await usdt.balanceOf(account);
-    setUsdtBalance(ethers.utils.formatUnits(bal, decimals));
-  };
-
-  return (
-    <div style={{ padding: 20 }}>
-      <h2>DCPTG - ETH ↔ USDT</h2>
-      <button onClick={connectWallet}>Connect Wallet</button>
-      {wallet && (
-        <div>
-          <p>Wallet: {wallet}</p>
-          <p>ETH Balance: {ethBalance}</p>
-          <p>USDT Balance: {usdtBalance}</p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default App;{
-  "name": "dcptg-frontend",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "ethers": "^5.7.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1"
-  },
-  "scripts": {
-    "start": "react-scripts start"
-  }
-}npm install
-npm start# DCPTG – Decentralized Crypto Platform Trading Gateway
-
-A minimal decentralized crypto swap dApp for ETH ↔ USDT.
-
----
-
-## 🔧 Smart Contract Features
-
-- Swaps ETH for USDT and vice versa
-- Owner can withdraw ETH
-- Compatible with Goerli Testnet
-
----
-
-## 📦 How to Run
-
-### 🧱 Smart Contract (Hardhat)
-
-1. Install dependencies:
-   ```bash
-   npm install --save-dev hardhat @nomiclabs/hardhat-waffle ethers dotenvnpx hardhat run scripts/deploy.js --network goerlinpm install
-npm start---
-
-✅ That’s your full project! Let me know if you want to:
-- Upload it to GitHub
-- Deploy the contract live
-- Add swap buttons to the UI
-
-You're ready to launch DCPTG! 🚀
